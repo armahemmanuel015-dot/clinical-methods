@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clinical Methods MCQs</title>
+<style>
+:root{--bg:#f6f1e4;--card:#fffdf6;--ink:#2b2a26;--mute:#6f6a5c;--line:#ddd3b8;--acc:#7a1f1f;--acc2:#a83232;--ok:#1f7a45;--okbg:#e3f4e8;--bad:#b3261e;--badbg:#fbe6e4;--note:#8a5a00;--notebg:#fff3d6;--chip:#efe7d0}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1b18;--card:#262420;--ink:#ece7d8;--mute:#a69f8c;--line:#3b3830;--acc:#e08a8a;--acc2:#d96a6a;--ok:#6fd09a;--okbg:#18301f;--bad:#ff9c94;--badbg:#3a1d1b;--note:#f0c36a;--notebg:#33290f;--chip:#33302a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Georgia,'Times New Roman',serif}
+.wrap{max-width:760px;margin:0 auto;padding:16px 16px 60px}
+h1{font-size:1.5rem;color:var(--acc);margin:8px 0 2px;line-height:1.2}
+.sub{color:var(--mute);margin:0 0 16px;font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer;font:inherit;font-size:.9rem}
+.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.row{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0;font-size:.95rem}
+.row label{display:flex;align-items:center;gap:6px;cursor:pointer}
+button.primary{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:12px 20px;font:inherit;font-weight:bold;cursor:pointer;width:100%;margin-top:8px}
+button.ghost{background:transparent;color:var(--acc);border:1px solid var(--acc);border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}
+.bar{height:8px;background:var(--chip);border-radius:6px;overflow:hidden;margin:6px 0 4px}
+.bar>i{display:block;height:100%;background:var(--acc);width:0;transition:width .25s}
+.meta{display:flex;justify-content:space-between;color:var(--mute);font-size:.85rem;gap:8px;flex-wrap:wrap}
+.tag{display:inline-block;background:var(--chip);border-radius:6px;padding:2px 8px;font-size:.78rem;color:var(--mute);margin-bottom:8px}
+.q{font-size:1.1rem;font-weight:bold;margin:4px 0 12px}
+.opt{display:flex;gap:10px;width:100%;text-align:left;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;margin:8px 0;font:inherit;cursor:pointer}
+.opt b{min-width:22px;color:var(--acc)}
+.opt.sel{border-color:var(--acc);background:var(--chip)}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.bad{border-color:var(--bad);background:var(--badbg)}
+.opt.locked{cursor:default}
+.exp{border-left:4px solid var(--ok);background:var(--okbg);border-radius:8px;padding:10px 14px;margin-top:12px}
+.exp.wrong{border-color:var(--bad);background:var(--badbg)}
+.exp h4{margin:0 0 4px;font-size:.95rem}
+.note{border-left:4px solid var(--note);background:var(--notebg);color:var(--ink);border-radius:8px;padding:8px 12px;margin-top:10px;font-size:.9rem}
+.fig{text-align:center;margin:10px 0;color:var(--ink)}
+.fig svg{max-width:100%;height:auto}
+.big{font-size:2.4rem;color:var(--acc);font-weight:bold;text-align:center;margin:4px 0}
+.mrow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:.92rem}
+details{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:8px 0;background:var(--card)}
+summary{cursor:pointer;font-weight:bold}
+.nav{display:flex;gap:10px;margin-top:12px}
+.nav button{flex:1}
+small.hint{color:var(--mute)}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+var TOPICS={hist:"History & General Exam",lump:"Lumps, Ulcers, Skin & Breast",hern:"Hernia & Scrotum",uro:"Urology",gi:"Abdomen & GI",chest:"Chest & Cardiovascular",burn:"Burns, Fluids & Shock"};
+
+var SVG={
+skin:'<svg viewBox="0 0 340 210" role="img" aria-label="Skin layers and burn depth"><rect x="10" y="20" width="150" height="16" fill="#e8b89a" stroke="currentColor"/><rect x="10" y="36" width="150" height="30" fill="#f2cfb8" stroke="currentColor"/><rect x="10" y="66" width="150" height="50" fill="#e9a9a0" stroke="currentColor"/><rect x="10" y="116" width="150" height="70" fill="#f6e3a6" stroke="currentColor"/><g font-size="11" fill="currentColor"><text x="170" y="32">Epidermis</text><text x="170" y="55">Papillary dermis</text><text x="170" y="95">Reticular dermis</text><text x="170" y="155">Hypodermis (fat)</text></g><g font-size="10" fill="#b3261e"><text x="14" y="14">1st degree: epidermis only</text><text x="14" y="200">3rd degree: through every layer (full thickness)</text></g><g font-size="10" fill="currentColor"><text x="20" y="55">2nd (superficial partial)</text><text x="20" y="95">2nd (deep partial)</text></g></svg>',
+lungs:'<svg viewBox="0 0 340 200" role="img" aria-label="Lung lobes"><path d="M60 30 Q20 80 35 170 Q70 185 130 165 L130 40 Q90 20 60 30Z" fill="#f4c7c7" stroke="currentColor"/><path d="M280 30 Q320 80 305 170 Q270 185 215 165 L215 50 Q250 20 280 30Z" fill="#f4c7c7" stroke="currentColor"/><path d="M40 105 L130 85" stroke="currentColor" stroke-dasharray="4 3"/><path d="M45 135 L130 120" stroke="currentColor" stroke-dasharray="4 3"/><path d="M215 110 L310 130" stroke="currentColor" stroke-dasharray="4 3"/><g font-size="11" fill="currentColor" text-anchor="middle"><text x="85" y="62">Upper</text><text x="85" y="112">Middle</text><text x="85" y="155">Lower</text><text x="262" y="75">Upper</text><text x="262" y="155">Lower</text><text x="85" y="15" font-weight="bold">RIGHT = 3 lobes</text><text x="262" y="15" font-weight="bold">LEFT = 2 lobes</text></g></svg>',
+spleen:'<svg viewBox="0 0 340 230" role="img" aria-label="Spleen enlarges inferomedially"><ellipse cx="170" cy="115" rx="120" ry="100" fill="none" stroke="currentColor"/><line x1="170" y1="15" x2="170" y2="215" stroke="currentColor" stroke-dasharray="4 3"/><line x1="50" y1="115" x2="290" y2="115" stroke="currentColor" stroke-dasharray="4 3"/><ellipse cx="225" cy="60" rx="22" ry="14" fill="#b86b9a" stroke="currentColor" transform="rotate(-30 225 60)"/><path d="M225 70 Q205 130 150 185" fill="none" stroke="#b3261e" stroke-width="3"/><polygon points="150,185 160,170 168,182" fill="#b3261e"/><g font-size="11" fill="currentColor"><text x="232" y="48">Spleen (LUQ)</text><text x="62" y="30" font-size="10">RUQ</text><text x="260" y="30" font-size="10">LUQ</text><text x="62" y="210" font-size="10">RLQ</text><text x="255" y="210" font-size="10">LLQ</text><text x="85" y="170" fill="#b3261e">grows toward RIF</text></g></svg>',
+appy:'<svg viewBox="0 0 340 230" role="img" aria-label="Appendicitis pain migration"><ellipse cx="170" cy="115" rx="120" ry="100" fill="none" stroke="currentColor"/><line x1="170" y1="15" x2="170" y2="215" stroke="currentColor" stroke-dasharray="4 3"/><line x1="50" y1="115" x2="290" y2="115" stroke="currentColor" stroke-dasharray="4 3"/><circle cx="170" cy="115" r="9" fill="#e6a23c"/><circle cx="120" cy="170" r="11" fill="#b3261e"/><path d="M165 122 Q140 150 128 163" fill="none" stroke="#b3261e" stroke-width="2.5"/><g font-size="11" fill="currentColor"><text x="182" y="112">1. Periumbilical (dull, visceral)</text><text x="30" y="205">2. Right iliac fossa</text><text x="30" y="219">(sharp, localised, parietal)</text><text x="62" y="30" font-size="10">RUQ</text><text x="260" y="30" font-size="10">LUQ</text></g></svg>'
+};
+
+var Q=[
+/* ---------- HISTORY & GENERAL EXAM ---------- */
+{t:"hist",q:"The ultimate aim of medical care is to relieve suffering. All of the following achieve this EXCEPT:",o:["Knowing how to plan proper management","Knowing how to approach management","Performing immediate surgery for all surgical patients","Taking a good history"],a:2,e:"Relieving suffering starts with understanding the patient: take a good history, know how to approach the problem, then plan the right management. Not every surgical patient needs immediate surgery. Some need drugs, fluids (resuscitation) or observation first. The word 'all' makes this option wrong."},
+{t:"hist",q:"Which of the following is NOT usually required during history taking?",o:["Consent","Rapport","Percussion","Chief complaint"],a:2,e:"History taking is the 'talking' part of the clinic visit: you get consent, build rapport (trust) and record the chief complaint. Percussion (tapping on the body) is a physical examination technique, not part of the history."},
+{t:"hist",q:"The current health concern that causes a patient to seek care is the:",o:["Chief complaint","Past medical history","Demographics","Allergic history"],a:0,e:"The chief complaint (CC) is the main problem, ideally in the patient's own words, that brought them to hospital. The history of presenting complaint (HPC) is the detailed story that follows it. Past medical history = older illnesses. Demographics = name, age, sex."},
+{t:"hist",q:"The reliability of a history from a patient or relative can be checked in all these ways EXCEPT:",o:["Consistency with a distant relative","Consistency with investigations","Consistency with physical examination","Getting the same response when asked differently at different points of the history"],a:0,e:"To check whether a history is trustworthy, compare it with objective things: lab or imaging results, your examination findings, and whether the patient repeats the same story when you ask in a different way. A distant relative may know very little and is not a reliable check."},
+{t:"hist",q:"Which of these statements about history taking is NOT true?",o:["Observing the patient before you start the history is important","It is best to ask leading questions right from the start","The history of presenting complaint should give an idea of the system involved","Relevant past history is essential"],a:1,e:"Start with open questions ('Tell me what brought you in today'). A leading question puts words in the patient's mouth ('Is the pain worse after eating?') and can bias the history. Use them later, only to clarify."},
+{t:"hist",q:"Which of the following patients is LEAST likely to give accurate information about his or her current illness?",o:["A 16-year-old female with shortness of breath at school","A 23-year-old male suspected of attempting suicide","A 14-year-old male with abdominal pain who is also vomiting","A 62-year-old female at a skilled nursing facility complaining of shortness of breath"],a:3,e:"Elderly people living in nursing facilities often have memory problems (dementia), several illnesses and many drugs, so their story may be unreliable. In such cases you need a collateral history from carers or the records. This question is partly a matter of judgement, so know the reasoning.",n:"Source key chose D. Option B (suspected suicide attempt) is also a case where the history may be unreliable, so treat this as 'best answer' reasoning."},
+{t:"hist",q:"A 69-year-old man smokes 40 cigarettes a day since age 49. Before that he smoked 20 a day since age 19. His smoking in pack-years is:",o:["10","50","70","90"],a:2,e:"Pack-years = packs per day x years smoked (1 pack = 20 cigarettes).\n• 40 cigarettes = 2 packs/day, from age 49 to 69 = 20 years, so 2 x 20 = 40.\n• 20 cigarettes = 1 pack/day, from age 19 to 49 = 30 years, so 1 x 30 = 30.\nTotal = 40 + 30 = 70 pack-years."},
+{t:"hist",q:"What is Fowler's position?",o:["Head lower than legs","Sitting up at 45 degrees","Lying face forward","Sitting up at 90 degrees"],a:1,e:"Fowler's position is the patient sitting half-upright, with the head of the bed raised (about 45 degrees in this question bank). Head lower than the legs is Trendelenburg. It is used for breathing difficulty, heart examination and feeding."},
+{t:"hist",q:"A student examined the cardiovascular system with the patient lying flat and the examiners were angry. At what angle should the bed have been?",o:["90","45","15","30"],a:1,e:"For the CVS exam the patient is positioned at 45 degrees. This lets you see the jugular venous pressure (JVP) in the neck. Lying flat fills the neck veins so the JVP can't be judged, and sitting at 90 degrees empties them out of sight."},
+{t:"hist",q:"Colour, size, shape, position and symmetry are assessed using:",o:["Inspection","Palpation","Percussion","Auscultation"],a:0,e:"The four exam steps are Inspection (look), Palpation (feel), Percussion (tap) and Auscultation (listen). Colour, size, shape, position and symmetry are all things you can see, so that is inspection."},
+{t:"hist",q:"On examination of the knee joint, crepitations are elicited by:",o:["Inspection","Palpation","Percussion","Auscultation"],a:1,e:"Crepitus is a grating or crackling sensation from joint surfaces rubbing. You feel it by placing your hand over the knee while moving the joint, so it is found by palpation."},
+{t:"hist",q:"When assessing a patient's temperature by touch, the nurse uses the:",o:["Palm","Fingertips","Forehead","Dorsum of the fingers"],a:3,e:"The back (dorsum) of the fingers has thinner skin and is more sensitive to temperature differences than the thick palm. The fingertips are best for fine touch and texture."},
+{t:"hist",q:"Mr. Y's skin looks pale on examination. The nurse expects he may have:",o:["Jaundice","Heart failure","Anaemia","SLE"],a:2,e:"Pallor (pale skin and conjunctivae) is the classic sign of anaemia: fewer red cells or less haemoglobin means less red colour. Jaundice is yellow. Heart failure shows swelling and breathlessness. SLE typically gives a butterfly rash."},
+{t:"hist",q:"In recording the features of a pulse, all of these are noted EXCEPT:",o:["The nature of the artery palpated","The pressure wave","The intensity","Volume"],a:2,e:"When describing a pulse you note rate, rhythm, volume, the character (pressure wave), the condition of the artery wall and whether other pulses are equal. 'Intensity' is not a standard pulse descriptor."},
+{t:"hist",q:"Haemoglobin is 8 g/dL. What is the PCV (%)?",o:["24%","48%","50%","60%"],a:0,e:"A quick bedside rule: PCV (packed cell volume) = Hb x 3. So 8 x 3 = 24%. Normal Hb is about 12-16 g/dL, so 8 means significant anaemia."},
+{t:"hist",q:"In assessing perfusion (blood supply) to the lower limb, which parameter is important?",o:["Jugular venous pressure","Radial pulse","Brachial pressure","Posterior tibial pulse","Capillary refill of the finger"],a:3,e:"To judge the circulation of the leg you check the leg's own pulses: dorsalis pedis and posterior tibial. Radial and brachial are arm vessels, JVP is neck/heart, and a finger tells you nothing about the foot."},
+{t:"hist",q:"Which anatomical landmark is used to measure the APPARENT length of the lower limb?",o:["Umbilicus","Greater trochanter","Medial epicondyle","ASIS"],a:0,e:"Apparent length is measured from a fixed midline point (the umbilicus or xiphisternum) to the medial malleolus. It includes any pelvic tilt. True length is measured from the ASIS (anterior superior iliac spine) to the medial malleolus.",n:"The source PDF highlighted ASIS (D). Standard textbooks give ASIS for TRUE length and umbilicus for APPARENT length. Confirm with your lecturer, since your exam key may follow the PDF."},
+{t:"hist",q:"In eliciting limb length discrepancy, which test is used?",o:["Allen's test","Allis test","Job's test","Apley's test"],a:1,e:"The Allis (Galeazzi) test: lie the patient on their back with hips and knees bent and feet flat. If one knee sits lower or further forward, the femur or tibia on that side is shorter. Allen's test checks hand blood supply and Apley's checks the knee meniscus."},
+{t:"hist",q:"A patient can move his leg sideways along the bed but cannot lift it off the bed. What is his power score?",o:["4","1","2","3"],a:2,e:"MRC power scale: 0 = nothing, 1 = flicker only, 2 = moves along the bed but cannot beat gravity, 3 = lifts against gravity, 4 = moves against some resistance, 5 = normal. Sliding but not lifting is grade 2."},
+{t:"hist",q:"What are the minimum and maximum values of the Glasgow Coma Scale (GCS)?",o:["3 and 15","0 and 15","1 and 20","3 and 10"],a:0,e:"GCS = Eye opening (1-4) + Verbal response (1-5) + Motor response (1-6). The lowest total is 1+1+1 = 3 (deep coma). The highest is 4+5+6 = 15 (fully awake)."},
+{t:"hist",q:"The GCS assesses all of the following EXCEPT:",o:["Best verbal response","Best motor response","Eye opening","Best sensorineural response"],a:3,e:"GCS has three parts: eye opening, best verbal response and best motor response. There is no 'sensorineural' component."},
+{t:"hist",q:"What is the normal pulse rate for an adult?",o:["50-90","60-100","50-80","50-70"],a:1,e:"Normal adult resting pulse is 60-100 beats per minute. Below 60 is bradycardia and above 100 is tachycardia."},
+{t:"hist",q:"The following can be used to describe fever EXCEPT:",o:["Intermittent","Constant","Discontinuous","Remitting"],a:2,e:"Fever patterns are continuous (constant), remittent (stays above normal but swings), intermittent (goes back to normal between spikes) and relapsing. 'Discontinuous' is not a standard fever pattern."},
+{t:"hist",q:"The following are characteristics of pain EXCEPT:",o:["Site","Onset","Character","Pulsability"],a:3,e:"Use SOCRATES to describe pain: Site, Onset, Character, Radiation, Associated symptoms, Time course, Exacerbating/relieving factors, Severity. Pulsability (feeling a pulse) is a feature of a lump or swelling, not of pain."},
+{t:"hist",q:"All of the following are indications of dehydration EXCEPT:",o:["Dry mucosa","Vomiting","Reduced skin turgor","Drowsiness"],a:1,e:"Dry mouth, reduced skin turgor (skin stays pinched), sunken eyes and drowsiness are signs of dehydration. Vomiting is a cause of fluid loss, not a sign of the dehydrated state itself."},
+{t:"hist",q:"Which is the most reliable way to assess for clubbing?",o:["Inspect the nail-bed angle from above","Assess the fluctuancy of the nail bed","Schamroth's sign","Inspect the nail-bed angle from the side"],a:3,e:"Look at the finger from the side. Normally the nail meets the skin at about 160 degrees. In clubbing that angle is lost (180 degrees or more). Schamroth's sign (no diamond gap when the nails of two fingers are held back to back) is a quick bedside check, but the key rates the side view as the most reliable."},
+
+/* ---------- LUMPS / ULCERS / SKIN / BREAST ---------- */
+{t:"lump",q:"Which of the following has a slip sign?",o:["Ganglion","Lipoma","Sebaceous cyst","Dermoid cyst"],a:1,e:"A lipoma is a soft fatty lump with a lobulated, slippery edge. When you slide your finger off its edge, it 'slips' away under your finger. That is the slip sign."},
+{t:"lump",q:"In which of these can we find the punctum sign?",o:["Ganglion","Fibroma","Lipoma","Sebaceous cyst"],a:3,e:"A sebaceous cyst is a blocked skin gland. It is attached to the skin by a tiny dark opening called the punctum, which is the blocked duct opening."},
+{t:"lump",q:"Which of the following would transilluminate brilliantly?",o:["Lipoma","Granuloma","Fibroadenoma","Hydrocele"],a:3,e:"Transillumination means shining a torch through a lump. Clear fluid lets light pass, so the lump glows. A hydrocele is clear fluid around the testis, so it lights up. Solid lumps (lipoma, fibroadenoma, granuloma) block light."},
+{t:"lump",q:"Which of the following is common in malignant lesions?",o:["Compressibility","Fixity to surrounding structures","Fluctuance","Transillumination"],a:1,e:"Cancers invade nearby tissues, so they become stuck (fixed) to skin, muscle or bone. Compressibility suggests a vascular lump, fluctuance suggests fluid or pus, and transillumination suggests clear fluid."},
+{t:"lump",q:"To determine the origin of an ulcer, which feature is most appropriate to examine?",o:["Edge","Floor","Margin","Base"],a:0,e:"The edge of an ulcer tells you its type and cause. Sloping means healing or non-specific ulcer. Punched out suggests a syphilitic or neuropathic ulcer. Rolled everted suggests a basal cell carcinoma. Everted suggests a squamous cell carcinoma. Undermined suggests TB."},
+{t:"lump",q:"Which describes the edge of a NON-SPECIFIC ulcer?",o:["Sloping","Undermined","Rolled","Punched out"],a:0,e:"A simple non-specific (traumatic or venous) ulcer has a sloping edge: skin slowly grows in from the border, like a gentle bank. Undermined = TB, rolled = basal cell carcinoma, punched out = syphilis or neuropathic ulcers."},
+{t:"lump",q:"A 19-year-old boy has an ulcer on the right foot. Which group of lymph nodes would you examine?",o:["Axillary","Ankle","Epitrochlear","Inguinal"],a:3,e:"Lymph nodes drain toward the nearest node group above. The foot and leg drain to the popliteal and then the inguinal nodes in the groin. Axillary and epitrochlear nodes serve the arm."},
+{t:"lump",q:"Which of the following is NOT a healthy sign of a healing ulcer (granulation tissue)?",o:["Bleeds easily","Looks pink","No discharge","No slough"],a:0,e:"Healthy granulation tissue is pink, moist and clean, with no pus or slough (dead tissue). Unhealthy tissue is pale, friable and discharging.",n:"Source key chose 'bleeds easily'. In many textbooks healthy granulation tissue can bleed on touch because it is rich in capillaries, so this question is debatable. Learn the key answer for the exam, but know it is contested."},
+{t:"lump",q:"In assessing a lump, which of the following is NOT important?",o:["Attachment","Colour","Cellularity","Site"],a:2,e:"Lump examination covers site, size, shape, surface, edge, colour, temperature, tenderness, consistency, attachment, fluctuance, transillumination, pulsatility, compressibility, reducibility and the local lymph nodes. 'Cellularity' is a microscope (histology) finding, not a bedside feature."},
+{t:"lump",q:"All the following are things to note when examining any lump or swelling EXCEPT:",o:["Size","Attachment","Surface and shape","Timing"],a:3,e:"Timing is part of the history (how long, how fast it grew). On examination you describe the lump itself: size, shape, surface, attachment and so on."},
+{t:"lump",q:"Concerning the compressibility of a lump, which statement is INCORRECT?",o:["Reducibility means that when the lump is pressed it does not re-appear spontaneously","A compressible lump is of vascular origin","A compressible lump re-appears spontaneously","Compressibility is the same as reducibility"],a:3,e:"Compressible: the lump shrinks when pressed and then refills on its own once you let go, like a sponge. It is typical of vascular lumps such as a haemangioma. Reducible: contents are pushed back into a cavity and stay there until something (cough, strain) pushes them out again. A hernia is reducible. They are not the same."},
+{t:"lump",q:"Lymph nodes can be palpated in all of the following areas EXCEPT:",o:["Groin","Axilla","Breast","Neck"],a:2,e:"Palpable lymph node groups include the neck (cervical), axilla and groin (inguinal). The breast itself has no regional palpable node group. Its lymph drains mostly to the axillary nodes."},
+{t:"lump",q:"In the examination of an ulcer, which statement is true?",o:["Examination of local lymph nodes is not compulsory","Local lymph nodes may contain infection","Local lymph nodes may not contain secondary tumour deposits","Local lymph nodes may not be tender"],a:1,e:"Always examine the draining lymph nodes of an ulcer. They may be enlarged and tender from infection (reactive), or hard and painless from cancer spread (secondary deposits)."},
+{t:"lump",q:"The commonest location of a lipoma is:",o:["Subcutaneous tissue","Intramuscular region","Epidural region","Sub-mucous region","Epidermal layer"],a:0,e:"A lipoma is a benign fat tumour and fat sits mostly just under the skin, in the subcutaneous tissue. That is where lipomas are found most often."},
+{t:"lump",q:"Which is the correct order of the skin layers, from outside to inside?",o:["Epidermis, papillary dermis, reticular dermis, hypodermis","Epidermis, hypodermis, reticular, papillary","Dermis, hypodermis, papillary, reticular","Hypodermis, dermis, reticular, papillary"],a:0,e:"From the surface: epidermis (thin outer layer), then the dermis (papillary part on top, reticular part below) and finally the hypodermis (fat). The diagram also shows how deep each burn degree goes.",s:"skin"},
+{t:"lump",q:"A 26-year-old woman has a breast mass. What is the most likely cause?",o:["Breast cancer","Fibroadenoma","Breast abscess","Breast cyst"],a:1,e:"Fibroadenoma is a benign, firm, smooth, very mobile ('breast mouse') lump in young women, usually in their 20s. Breast cancer is more likely after about 40 years."},
+{t:"lump",q:"A hard lesion is found in the left breast of a 45-year-old woman. Which muscle do you tense to check if the lump is fixed?",o:["Latissimus dorsi","Pectoralis major","Rectus abdominis","Trapezius"],a:1,e:"The breast sits on pectoralis major. Press the hand on the hip (or push the hand against the hip) to tense the muscle. If the lump moves less now, it is fixed to the muscle, which suggests it is invading deeply."},
+{t:"lump",q:"Which is the most important question in taking a history for suspected breast cancer?",o:["Family history of breast cancer","Age","Parity","Medication"],a:0,e:"A strong family history (BRCA1/BRCA2 genes) is among the strongest risk factors for breast cancer, especially if relatives were affected young. Age, parity and drugs matter but carry less weight."},
+{t:"gi",q:"Which of the following signs have been known to occur in acute pancreatitis? (Choose ALL that apply)",o:["Trousseau's sign","Courvoisier's sign","Murphy's sign","Grey-Turner's sign","Cullen's sign"],a:[3,4],e:"In severe pancreatitis, blood tracks under the skin: Grey-Turner's sign = bruising of the flanks; Cullen's sign = bruising around the umbilicus. Courvoisier's = palpable painless gallbladder (pancreatic head cancer). Murphy's = gallbladder inflammation. Trousseau's = migratory thrombophlebitis or hypocalcaemia."},
+
+/* ---------- HERNIA & SCROTUM ---------- */
+{t:"hern",q:"The following are forms of hernia EXCEPT:",o:["Umbilical","Inguinal","Iliac","Epigastric"],a:2,e:"A hernia is a bulge of tissue through a weak spot in the wall of its cavity. Common types are umbilical, inguinal, epigastric, femoral and incisional. 'Iliac hernia' is not a recognised type."},
+{t:"hern",q:"The following can cause a ventral (vertical-wall) hernia EXCEPT:",o:["Previous abdominal surgery","Increased intra-abdominal pressure","Breast feeding","Congenital weakness of the linea alba"],a:2,e:"Ventral hernias occur where the abdominal wall is weak (scar, linea alba) or pushed hard from inside (coughing, obesity, pregnancy, straining). Breast feeding does not raise abdominal pressure or weaken the wall.",n:"The PDF says 'vertical hernia'. This most likely means a ventral or incisional hernia (hernia through the front abdominal wall)."},
+{t:"hern",q:"An inguinal hernia may MOST COMMONLY become:",o:["Obstructed","Modulated","Incarcerated","Decompressed"],a:2,e:"The complications of a hernia in order of increasing severity: incarcerated (stuck, cannot be pushed back), then obstructed (bowel blocked), then strangulated (blood supply cut off and tissue dies). Incarceration is the commonest."},
+{t:"hern",q:"An inguinal hernia may become ______ as its MOST FEARED complication.",o:["Obstructed","Strangulated","Incarcerated","Decompressed"],a:1,e:"A strangulated hernia has its blood supply cut off. The trapped bowel can die (gangrene) and perforate within hours. It is a surgical emergency, hence the most feared complication."},
+{t:"hern",q:"All the following are characteristics of an inguinal hernia EXCEPT:",o:["It may move all over the body","It may be reducible","It may be irreducible","It may contain intestines"],a:0,e:"A hernia stays in its own region (the groin or scrotum). It can be reducible or irreducible and may contain bowel or omentum. A lump that moves all over the body is not a hernia."},
+{t:"hern",q:"A man has a mass around the right inguinal region. It enlarges, becomes visible and palpable on coughing. What is the diagnosis?",o:["Right inguinal lymph nodes","Right inguinal hernia","Hydrocele","Volvulus"],a:1,e:"A cough impulse means the lump gets bigger when pressure inside the abdomen rises, because the hernia contents are pushed out through the weak spot. Enlarged lymph nodes and hydrocele do not do this."},
+{t:"hern",q:"The following are features of a hydrocele:",o:["It is reducible","It is irreducible","It is transilluminant","All of the above","None of the above"],a:2,e:"A hydrocele is fluid in the sac around the testis. The classic feature is that it is transilluminant (light shines through). Most hydroceles are irreducible, and you can 'get above' the swelling, unlike an inguinoscrotal hernia.",n:"A different version of this question in the PDF keyed 'All of the above' (a communicating hydrocele in children can be reducible). Transilluminant is the standard answer."},
+{t:"hern",q:"A 50-year-old man has a tender scrotal swelling with fever. The likely diagnosis is:",o:["Hydrocele","A non-communicating hydrocele","Lipoma of scrotum","Epididymo-orchitis"],a:3,e:"Infection of the epididymis and testis (epididymo-orchitis) causes a painful, tender, hot swelling with fever. Hydroceles and lipomas are usually painless."},
+{t:"hern",q:"A 63-year-old man has a swollen scrotum. The swelling is soft, fluctuant and transilluminant, there is no cough impulse, and you can 'get above' the swelling. The most likely diagnosis is:",o:["Inguinal hernia","Varicocele","Hydrocele","Femoral hernia"],a:2,e:"Getting above the swelling means the swelling is confined to the scrotum, so it is not a hernia from the abdomen. No cough impulse and transillumination fit a hydrocele."},
+
+/* ---------- UROLOGY ---------- */
+{t:"uro",q:"In a patient with BPH, which of the following is INCORRECT?",o:["BPH is the same as benign prostatic enlargement","Difficulty in micturition is very common","Straining at micturition improves urine flow","Haematuria is not an uncommon symptom"],a:2,e:"BPH makes the prostate squeeze the urethra. Straining does not fix this and the stream stays weak and hesitant. The common symptoms are hesitancy, poor stream, terminal dribbling, frequency, nocturia and sometimes haematuria."},
+{t:"uro",q:"In prostate carcinoma, which of the following may occur?",o:["Acute urine retention may occur","Chronic urine retention is never an issue","Headaches, fits and convulsions are caused by uraemia","Rule out bony metastasis in elderly with sciatica"],a:3,e:"Prostate cancer spreads to bone, especially the spine and pelvis, and can mimic sciatica. So in an older man with back or leg pain, think of bony metastasis. Chronic retention can occur too, which makes the other options partly wrong.",n:"This question has more than one arguable option. The source key chose D."},
+{t:"uro",q:"About ureteric colic, which of the following is FALSE?",o:["Pain radiates from the costovertebral angle to the groin","It is not gripping in nature","It is intermittent in nature","It is a true colic"],a:1,e:"Ureteric colic is a true colic: severe, gripping pain that comes in waves as the ureter squeezes against a stone. It radiates from the loin (costovertebral angle) down to the groin. So 'not gripping' is false."},
+{t:"uro",q:"Which of the following does NOT describe acute pyelonephritis?",o:["Sudden onset of severe pain in one or both loins","Pain from cholecystitis is not a differential diagnosis","Micturition becomes frequent and painful","Headache, nausea and vomiting often begin a few hours before the pain"],a:1,e:"Acute pyelonephritis (kidney infection) gives loin pain, fever, and frequent, painful urination. Right-sided pyelonephritis can mimic cholecystitis, so cholecystitis IS a differential diagnosis. The statement in this option is therefore false."},
+{t:"uro",q:"All of the following statements about haematuria are true EXCEPT:",o:["Microscopic haematuria is not always abnormal","Haematuria at the start of the stream indicates a cause in the lower urinary tract","Haematuria mixed uniformly with urine points to a cause in the upper urinary tract","Terminal haematuria is caused by bladder irritation or infection","Painful haematuria indicates malignant pathology"],a:4,e:"Blood at the start = urethra; mixed throughout = kidney or ureter; at the end = bladder. Cancer of the bladder or kidney classically gives PAINLESS haematuria. Pain with blood more often means stones or infection."},
+
+/* ---------- ABDOMEN & GI ---------- */
+{t:"gi",q:"A patient has periumbilical pain that migrated to the right iliac fossa. What is the diagnosis?",o:["Appendicitis","Intestinal obstruction","Volvulus","IBD"],a:0,e:"Early on, the inflamed appendix gives a vague central (periumbilical) pain, because gut pain is felt near the midline. When the inflammation touches the abdominal wall lining (parietal peritoneum), the pain becomes sharp and settles in the right iliac fossa (RIF). This migration is classic for appendicitis.",s:"appy"},
+{t:"gi",q:"The spleen is an intra-abdominal organ that, when enlarged, grows toward the:",o:["Superior","Inferiomedial","Superiolateral","Inferiolateral"],a:1,e:"The spleen sits under the left ribs. When it gets big it moves downward and inward, toward the right iliac fossa. The edge has a notch you can feel, and you cannot get your fingers above it.",n:"Two versions in the PDF were keyed 'inferiolateral' and one 'inferiomedial'. Standard clinical teaching (Browse and others) is INFERIOMEDIAL, so I marked B. If your lecturer used the other key, follow your lecturer.",s:"spleen"},
+{t:"gi",q:"How many regions does the stomach have?",o:["1","3","9","2"],a:1,e:"The stomach is divided into three parts for description: fundus (top), body (middle) and pylorus (outlet). Some texts also add the cardia (entry), but this exam bank uses 3."},
+{t:"gi",q:"A patient has abdominal pain, vomiting, abdominal distension and constipation. What is the clinical diagnosis?",o:["Peritonitis","Intestinal obstruction","Bowel perforation","IBD"],a:1,e:"The four classic features of bowel obstruction are colicky pain, vomiting, distension and absolute constipation (no stool and no gas). Peritonitis and perforation give a rigid, very tender abdomen."},
+{t:"gi",q:"What is the commonest cause of haematemesis (vomiting blood)?",o:["Peptic ulcer disease (PUD)","Variceal bleeding","Mallory-Weiss syndrome","Oesophagitis"],a:0,e:"Peptic ulcers in the stomach or duodenum are the most common cause of upper GI bleeding and thus of haematemesis. Varices (in cirrhosis) bleed massively but are less common."},
+{t:"gi",q:"A chronic alcoholic starts retching, then vomits copious blood. He has upper abdominal pain. The most likely diagnosis is:",o:["Chronic liver disease","Peptic ulcers","Oesophageal ulcer","Mallory-Weiss tear"],a:3,e:"Forceful retching tears the lining where the oesophagus meets the stomach: a Mallory-Weiss tear. The clue is retching first, then blood. Alcohol is the classic trigger. Varices and ulcers usually bleed without the retching story.",n:"This is the textbook link, but chronic liver disease with oesophageal varices should also be kept in mind in a chronic alcoholic."},
+{t:"gi",q:"Lower GI bleeding with fresh red blood in the stool is called:",o:["Melaena","Haemorrhoids","Haematochezia","Dysentery"],a:2,e:"Haematochezia = fresh red blood passed per rectum, from the lower GI tract. Melaena = black, tarry, foul-smelling stool (digested blood from the upper GI tract). Haemorrhoids are a cause, not the name of the sign."},
+{t:"gi",q:"Which cause of lower GI bleeding is the commonest in adults?",o:["Haemorrhoids","Colorectal carcinoma","Ischaemic colitis","Diverticulitis"],a:0,e:"Haemorrhoids (piles) are swollen veins in the anal canal. They are very common and cause bright red bleeding on opening the bowels. Colon cancer is the one not to miss, but it is less common."},
+{t:"gi",q:"Typhoid perforation is possible because of:",o:["Peyer's patches","Absorption of water","Inflammation","Ileo-caecal junction"],a:0,e:"Typhoid bacteria (Salmonella Typhi) invade the Peyer's patches, the lymph tissue in the lower ileum. They swell and ulcerate in the 2nd-3rd week and can burst through the bowel wall: typhoid perforation."},
+{t:"gi",q:"What is the commonest site of duodenal ulcer perforation?",o:["First part of the duodenum","Second part","Third part","Last part"],a:0,e:"Duodenal ulcers mostly occur in the first part of the duodenum (the duodenal cap), right after the stomach, where acid hits the lining hardest. Perforation typically occurs on the anterior wall there."},
+{t:"gi",q:"Which of the following about peptic ulcer perforation is true?",o:["Haemorrhage is a common complication","Duodenal perforation causes more deaths than gastric perforation","It is commoner in males than in females","Gastrotomy is the main treatment"],a:2,e:"Peptic ulcer disease and its perforation are commoner in men. Gastric ulcer perforations tend to have higher mortality than duodenal ones. Treatment is surgical repair (e.g. omental patch) with resuscitation, not gastrotomy.",n:"Another version of this question in the PDF keyed 'Haemorrhage is a common complication'. This version's key (commoner in males) is the cleaner answer."},
+{t:"gi",q:"The use of triple therapy for peptic ulcer disease is aimed at:",o:["Eradication of H. pylori","Preventing complications","Suppression of gastric acid and eradication of H. pylori","All of the above"],a:3,e:"Triple therapy = a proton pump inhibitor (reduces acid) + two antibiotics (kill H. pylori). So it suppresses acid, eradicates the bacteria, helps the ulcer heal and prevents it coming back, hence complications."},
+{t:"gi",q:"The use of proton pump inhibitors (PPIs) is aimed at:",o:["Eradicating H. pylori","Increased mucous production","Suppression of acid production","All of the above"],a:2,e:"PPIs (omeprazole, pantoprazole, etc.) block the acid pump (H+/K+ ATPase) in the stomach's parietal cells, so less acid is made. They do not kill H. pylori by themselves."},
+{t:"gi",q:"HCl in gastric secretions is produced by:",o:["Goblet cells","Parietal cells","Chief cells","Enterochromaffin cells","G cells"],a:1,e:"Parietal cells make hydrochloric acid and intrinsic factor. Chief cells make pepsinogen. Goblet cells make mucus. G cells make gastrin (the hormone that stimulates acid)."},
+{t:"gi",q:"A patient has right upper quadrant abdominal pain, and a mass is palpated on examination. What is the likely diagnosis?",o:["Appendicitis","Chronic liver disease","Acute pyelonephritis","Ulcerative colitis"],a:1,e:"The liver lies in the right upper quadrant. Chronic liver disease can enlarge it (hepatomegaly) and cause pain and a palpable mass. Appendicitis is in the right lower quadrant. Pyelonephritis gives loin pain.",n:"The PBL2027 section of the PDF keyed 'acute pyelonephritis' for the same stem, which looks like a mis-highlight. The PA2025 section keyed chronic liver disease."},
+{t:"gi",q:"Which of the following is a stigma (sign) of chronic liver disease?",o:["Epigastric hernia","Finger clubbing","Scaphoid abdomen","Testicular hypertrophy"],a:1,e:"Signs of chronic liver disease include clubbing, palmar erythema, spider naevi, jaundice, ascites and gynaecomastia. Testes shrink (atrophy) rather than enlarge, because of raised oestrogen."},
+{t:"gi",q:"Which is true about abdominal pain?",o:["Peptic ulcer pain is usually experienced in the hypogastrium","The pain of irritable bowel syndrome is usually well localised","The pain of oesophagitis is usually retrosternal","The pain of pancreatitis usually radiates to the groin"],a:2,e:"Oesophagitis gives burning pain behind the breastbone (retrosternal). Peptic ulcer pain is epigastric. IBS pain is diffuse. Pancreatitis pain bores through to the back."},
+{t:"gi",q:"Which is true about jaundice?",o:["Pale stools and dark urine are characteristic of the jaundice of haemolytic anaemia","Bilirubin is used by the liver in the synthesis of red blood cells","Itching may be a sign of obstructive jaundice","Putting a danger-of-infection sticker on blood samples from an IV drug user with jaundice is optional"],a:2,e:"When bile flow is blocked (obstructive jaundice), bile salts build up in the skin and cause itching. Stools turn pale and urine dark. Haemolytic jaundice does not do this. Bilirubin is a breakdown product of red cells, not a building block. Hazard stickers are never optional."},
+{t:"gi",q:"Which of the following statements is NOT true?",o:["The abdominal wall and parietal peritoneum are supplied by the somatic nervous system","Abdominal organs and the visceral peritoneum are innervated by the autonomic nervous system","Pain arising from pathology in the midgut is localised to the epigastrium","Colicky abdominal pain indicates underlying obstructive pathology"],a:2,e:"Gut pain is felt according to the embryological gut: foregut (stomach, duodenum) = epigastrium; midgut (small bowel, appendix) = periumbilical; hindgut = suprapubic. So midgut pain is periumbilical, not epigastric."},
+{t:"gi",q:"All of the following are true EXCEPT:",o:["Abdominal examination must always be preceded by general examination","Abdominal discoloration at specific sites denotes underlying serious pathology","Free movement of the abdominal wall on respiration excludes peritonitis","Rebound tenderness is best tested by gentle percussion","An intra-abdominal lump becomes prominent when the patient tenses the abdomen or lifts the head"],a:4,e:"When the patient tenses the abdominal muscles, an abdominal wall lump stays or becomes more prominent, but a lump inside the abdomen is pushed deeper and becomes less obvious. This is a way to tell the two apart.",n:"Option C is also shaky (a quiet, moving abdominal wall makes peritonitis less likely but does not fully exclude it). The key chose E."},
+{t:"gi",q:"The following are true about appendicitis. Who is MOST likely to develop it?",o:["An obese woman","An alcoholic male","People between 10 and 30 years","People who suffer from acid reflux"],a:2,e:"Appendicitis peaks in the teens and twenties, when the lymph tissue in the appendix is most active and can block the lumen. It is not strongly linked to obesity, alcohol or reflux."},
+{t:"gi",q:"What are the symptoms of appendicitis?",o:["Loss of appetite, abdominal tenderness","Abdominal pain, fever, vomiting","Both A and B","Appendicitis usually has no symptoms"],a:2,e:"Typical appendicitis: central then right iliac fossa pain, loss of appetite (anorexia), nausea and vomiting, low fever and tenderness over McBurney's point."},
+{t:"gi",q:"The long-term consequences of an appendectomy include:",o:["Fatigue","Bloating","Weight loss","There are no long-term consequences"],a:3,e:"The appendix is not essential for health, so removing it has no important long-term effects. Early complications such as wound infection or abscess are possible, but not chronic problems."},
+
+/* ---------- CHEST & CVS ---------- */
+{t:"chest",q:"The left lung has how many lobes?",o:["5","2","3","1"],a:1,e:"The right lung has three lobes (upper, middle, lower) and the left lung has two (upper and lower). The left side gives up room to the heart. The left upper lobe carries a small tongue-like part called the lingula.",s:"lungs"},
+{t:"chest",q:"A 50-year-old woman with immunosuppression has difficulty breathing, productive cough with whitish sputum, weight loss and night sweats. She most likely has:",o:["Community-acquired pneumonia","Hospital-acquired pneumonia","Lung cancer","Pulmonary TB"],a:3,e:"The key is the combination of cough, weight loss, night sweats and weak immunity: that is pulmonary tuberculosis. Pneumonia comes on over days and has no weight loss or night sweats."},
+{t:"chest",q:"Pleural effusion gives what note on percussion?",o:["Hyper-resonant","Stony dullness","Resonant","Tympanic"],a:1,e:"Normal lung sounds hollow (resonant) when you tap it. Fluid in the pleural space deadens the sound completely, which is called stony dullness. Hyper-resonant suggests pneumothorax."},
+{t:"chest",q:"All of the following can be found on examination of a patient with pneumonia EXCEPT:",o:["Respiratory distress","Bradycardia","Bronchial breath sounds","Positive tactile fremitus"],a:1,e:"Pneumonia solidifies (consolidates) part of the lung, giving bronchial breathing, increased tactile fremitus (vibration) and increased vocal resonance. Infection and breathlessness raise the heart rate (tachycardia), so bradycardia is the odd one out."},
+{t:"chest",q:"A patient with asthma and difficulty breathing. Which will be found on examination?",o:["Rhonchi","Wheeze","Croup","Bronchial breathing"],a:1,e:"In asthma the small airways narrow, so air whistles out: a high-pitched wheeze on breathing out. Wheeze is the modern word for what older books call rhonchi (polyphonic expiratory rhonchi). Croup is a childhood upper airway infection.",n:"In the PA2025 section the key was 'rhonchi'. Both refer to the same sound in asthma."},
+{t:"chest",q:"A mother brings her six-year-old son because she noticed a depression in his chest. This is most likely:",o:["Pectus carinatum","Pectus excavatum","Situs inversus","Dextrocardia"],a:1,e:"Pectus excavatum ('funnel chest') is a sunken breastbone. Pectus carinatum ('pigeon chest') sticks out. Situs inversus and dextrocardia are about organ position, not chest shape."},
+{t:"chest",q:"Which system is NOT related to thoracic surgery?",o:["Cardiac","Gastrointestinal","Genitourinary","Respiratory"],a:2,e:"Thoracic surgery deals with the chest: heart, lungs, oesophagus and chest wall. The genitourinary system (kidneys, bladder, genitals) is not in the chest."},
+
+/* ---------- BURNS, FLUIDS, SHOCK ---------- */
+{t:"burn",q:"Third-degree burns are:",o:["Full thickness","Not very painful","Cause compartment syndrome","All of the above"],a:3,e:"A third-degree burn destroys every skin layer (full thickness). The nerve endings are destroyed too, so it is not very painful. The tight, leathery burnt skin (eschar) can squeeze underlying tissues and cause compartment syndrome.",s:"skin"},
+{t:"burn",q:"Third-degree burns appear as:",o:["Leathery","Reddish","Pale","Ragged"],a:0,e:"Full-thickness burns look dry, leathery, white or charred, and do not blanch. Reddish and painful with blisters are partial thickness burns."},
+{t:"burn",q:"All are true of first-degree burns EXCEPT:",o:["Do not form blisters","Reddish","Are painful","Form blisters"],a:3,e:"First-degree burns (like sunburn) only damage the epidermis. The skin is red and painful but there are no blisters. Blisters appear in second-degree burns.",s:"skin"},
+{t:"burn",q:"Second-degree burns are:",o:["Superficial partial","Deep partial","Full thickness","Both superficial partial and deep partial"],a:3,e:"Second-degree burns reach the dermis and are divided into superficial partial (papillary dermis, blisters, very painful, moist pink) and deep partial (reticular dermis, less painful, drier). Full thickness is third degree.",n:"One version of this question in the PDF keyed only 'superficial partial', but both types are second degree, so 'both' is the complete answer.",s:"skin"},
+{t:"burn",q:"A 50 kg woman has a scald on her trunk, TBSA about 20%. How much IV fluid should she receive in the first 8 hours?",o:["4000 ml","2000 ml","3500 ml","5500 ml"],a:1,e:"Parkland formula: 4 ml x weight (kg) x % TBSA = fluid for the first 24 hours. 4 x 50 x 20 = 4000 ml. Give half in the first 8 hours (2000 ml) and the other half over the next 16 hours.",n:"The PA2025 section of the PDF keyed 3500 ml, which is a mistake. The Parkland formula gives 2000 ml in the first 8 hours."},
+{t:"burn",q:"Which of the following shows the patient is poorly managed from shock?",o:["Urine output > 0.5 ml/kg","BP of 120/70 mmHg","Pulse rate of 112 bpm","RR of 18 cpm"],a:2,e:"Signs that shock is resolved: good urine output (>0.5 ml/kg/hr), normal BP, normal pulse (60-100) and normal respiratory rate. A pulse of 112 is still tachycardia, so the shock is not yet controlled."}
+];
+Q=Q.filter(function(x){return !x.skip});
+
+var app=document.getElementById("app");
+var L="ABCDE";
+var st={pool:[],i:0,res:[],sel:[],done:false,study:false,topic:"all",shuffle:true,label:""};
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function shuffleArr(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function isMulti(q){return Array.isArray(q.a)}
+function correctSet(q){return isMulti(q)?q.a:[q.a]}
+
+function home(){
+  var counts={};Q.forEach(function(q){counts[q.t]=(counts[q.t]||0)+1});
+  var chips='<button class="chip '+(st.topic==="all"?"on":"")+'" onclick="setTopic(\'all\')">All ('+Q.length+')</button>';
+  Object.keys(TOPICS).forEach(function(k){chips+='<button class="chip '+(st.topic===k?"on":"")+'" onclick="setTopic(\''+k+'\')">'+TOPICS[k]+' ('+(counts[k]||0)+')</button>'});
+  app.innerHTML='<h1>Clinical Methods MCQs</h1><p class="sub">Masterpiece Clinical Methods bank (2022 to 2025 papers) with duplicates merged. Every question has a plain-language explanation.</p>'+
+  '<div class="card"><b>Pick a topic</b><div class="chips">'+chips+'</div>'+
+  '<div class="row"><label><input type="checkbox" id="shuf" '+(st.shuffle?"checked":"")+' onchange="st.shuffle=this.checked"> Shuffle questions</label>'+
+  '<label><input type="checkbox" id="stud" '+(st.study?"checked":"")+' onchange="st.study=this.checked"> Study mode (answers shown)</label></div>'+
+  '<button class="primary" onclick="begin()">Start</button></div>'+
+  '<div class="note"><b>Heads up:</b> a few answers in the original PDF disagree with each other or with standard textbooks. Those questions carry a yellow note so you can check with your lecturers.</div>';
+}
+function setTopic(k){st.topic=k;home()}
+function begin(){
+  var idx=[];Q.forEach(function(q,n){if(st.topic==="all"||q.t===st.topic)idx.push(n)});
+  start(idx,st.topic==="all"?"All topics":TOPICS[st.topic]);
+}
+function start(idx,label){
+  st.pool=st.shuffle?shuffleArr(idx.slice()):idx.slice();
+  st.i=0;st.res=[];st.sel=[];st.done=false;st.label=label;
+  render();
+}
+function render(){
+  if(st.i>=st.pool.length){return results()}
+  var q=Q[st.pool[st.i]],multi=isMulti(q),cs=correctSet(q);
+  var showAns=st.study||st.done;
+  var h='<div class="meta"><span>'+esc(st.label)+'</span><span>Question '+(st.i+1)+' of '+st.pool.length+'</span></div>';
+  h+='<div class="bar"><i style="width:'+(st.i/st.pool.length*100)+'%"></i></div>';
+  h+='<div class="card"><span class="tag">'+TOPICS[q.t]+'</span>'+(multi?' <span class="tag">choose all that apply</span>':'');
+  h+='<div class="q">'+esc(q.q)+'</div>';
+  if(q.s&&SVG[q.s]&&showAns&&false){}
+  q.o.forEach(function(o,k){
+    var c="opt";
+    if(showAns){
+      if(cs.indexOf(k)>-1)c+=" ok";else if(st.sel.indexOf(k)>-1)c+=" bad";
+      c+=" locked";
+    } else if(st.sel.indexOf(k)>-1)c+=" sel";
+    h+='<button class="'+c+'" onclick="pick('+k+')"><b>'+L[k]+'.</b><span>'+esc(o)+'</span></button>';
+  });
+  if(multi&&!showAns)h+='<button class="primary" onclick="submitMulti()" '+(st.sel.length?'':'disabled style="opacity:.5"')+'>Check answer</button>';
+  if(showAns){
+    var right=!st.study&&sameSet(st.sel,cs);
+    h+='<div class="exp '+((st.study||right)?'':'wrong')+'"><h4>'+(st.study?'Answer: '+cs.map(function(k){return L[k]}).join(", "):(right?'Correct':'Not quite. Correct: '+cs.map(function(k){return L[k]}).join(", ")))+'</h4>'+esc(q.e).replace(/\n/g,"<br>")+'</div>';
+    if(q.s&&SVG[q.s])h+='<div class="fig">'+SVG[q.s]+'</div>';
+    if(q.n)h+='<div class="note">⚠ '+esc(q.n)+'</div>';
+    h+='<div class="nav"><button class="ghost" onclick="prev()" '+(st.i===0?'disabled style="opacity:.4"':'')+'>Back</button><button class="primary" style="margin-top:0" onclick="next()">'+(st.i===st.pool.length-1?'Finish':'Next')+'</button></div>';
+  }
+  h+='</div>';
+  h+='<div style="text-align:center"><button class="ghost" onclick="home()">Quit to menu</button></div>';
+  app.innerHTML=h;
+  window.scrollTo(0,0);
+}
+function sameSet(a,b){if(a.length!==b.length)return false;return a.every(function(x){return b.indexOf(x)>-1})}
+function pick(k){
+  var q=Q[st.pool[st.i]];
+  if(st.study||st.done)return;
+  if(isMulti(q)){var p=st.sel.indexOf(k);if(p>-1)st.sel.splice(p,1);else st.sel.push(k);render();return}
+  st.sel=[k];lock();
+}
+function submitMulti(){if(st.sel.length)lock()}
+function lock(){
+  var q=Q[st.pool[st.i]];
+  st.done=true;
+  var ok=sameSet(st.sel,correctSet(q));
+  st.res[st.i]={qi:st.pool[st.i],ok:ok};
+  render();
+}
+function next(){
+  if(st.study&&!st.res[st.i])st.res[st.i]={qi:st.pool[st.i],ok:true};
+  st.i++;st.sel=[];st.done=false;render();
+}
+function prev(){
+  if(st.i>0){st.i--;st.sel=[];st.done=false;render()}
+}
+function results(){
+  if(st.study){app.innerHTML='<h1>Study round finished</h1><div class="card"><p>You went through '+st.pool.length+' questions with answers visible. Turn off study mode to test yourself.</p><button class="primary" onclick="home()">Back to menu</button></div>';return}
+  var tot=st.res.length,ok=st.res.filter(function(r){return r&&r.ok}).length;
+  var miss=st.res.filter(function(r){return r&&!r.ok}).map(function(r){return r.qi});
+  var by={};st.res.forEach(function(r){if(!r)return;var t=Q[r.qi].t;by[t]=by[t]||[0,0];by[t][1]++;if(r.ok)by[t][0]++});
+  var h='<h1>Results</h1><div class="card"><div class="big">'+ok+' / '+tot+'</div><p style="text-align:center;margin:0">'+Math.round(ok/Math.max(tot,1)*100)+'%</p>';
+  Object.keys(by).forEach(function(t){h+='<div class="mrow"><span>'+TOPICS[t]+'</span><b>'+by[t][0]+' / '+by[t][1]+'</b></div>'});
+  if(miss.length)h+='<button class="primary" onclick="retry()">Retry '+miss.length+' missed</button>';
+  h+='<button class="primary" style="background:transparent;color:var(--acc);border:1px solid var(--acc)" onclick="home()">Back to menu</button></div>';
+  if(miss.length){h+='<h3>Review missed</h3>';miss.forEach(function(qi){var q=Q[qi];h+='<details><summary>'+esc(q.q)+'</summary><p><b>Answer: </b>'+correctSet(q).map(function(k){return L[k]+'. '+esc(q.o[k])}).join("; ")+'</p><p>'+esc(q.e).replace(/\n/g,"<br>")+'</p>'+(q.n?'<div class="note">⚠ '+esc(q.n)+'</div>':'')+'</details>'})}
+  app.innerHTML=h;window.scrollTo(0,0);
+}
+function retry(){
+  var miss=st.res.filter(function(r){return r&&!r.ok}).map(function(r){return r.qi});
+  start(miss,"Retry: missed questions");
+}
+home();
+</script>
+</body>
+</html>
